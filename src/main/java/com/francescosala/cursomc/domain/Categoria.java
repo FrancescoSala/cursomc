@@ -1,12 +1,11 @@
 package com.francescosala.cursomc.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,14 +19,15 @@ public class Categoria implements Serializable {
     private Integer id;
     private String nome;
 
+    @ManyToMany(mappedBy = "categorias")
+    private List<Product> products = new ArrayList<>();
+
     public Categoria() {
     }
 
     public Categoria(Integer id, String nome) {
-
         this.id = id;
         this.nome = nome;
-
     }
 
     public Integer getId() {
@@ -44,6 +44,14 @@ public class Categoria implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override
