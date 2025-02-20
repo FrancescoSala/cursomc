@@ -5,12 +5,10 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
-public class Product implements Serializable {
+public class Produto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -29,13 +27,24 @@ public class Product implements Serializable {
     )
     private List<Categoria> categorias = new ArrayList<>();
 
-    public Product() {
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itens = new HashSet<>();
+
+    public Produto() {
     }
 
-    public Product(Integer id, String nome, Double preco) {
+    public Produto(Integer id, String nome, Double preco) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+    }
+
+    public List<Pedido> getPedidos() {
+        List<Pedido> lista = new ArrayList<>();
+        for (ItemPedido item : itens) {
+            lista.add(item.getPedido());
+        }
+        return lista;
     }
 
     public Integer getId() {
@@ -70,11 +79,19 @@ public class Product implements Serializable {
         this.categorias = categorias;
     }
 
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id);
+        Produto produto = (Produto) o;
+        return Objects.equals(id, produto.id);
     }
 
     @Override
